@@ -1,17 +1,37 @@
 # Fake Data Generator
 
 ## Purpose
-Sample PHP object-oriented REST API that generates fake data of nonexistent Danish persons.
+Sample Node.js REST API that generates fake data of nonexistent Danish persons.
 
 ## Dependencies
 
+- Node.js 16.0.0 or higher
+- MySQL/MariaDB database
 - The fake persons' first name, last name, and gender are extracted from the file `data/person-names.json`.
 - The fake persons' postal code and town are extracted from the MariaDB/MySQL database `addresses`.
 
-## Database Installation
+## Installation
 
-1. The script `db/addresses.sql` must be run. It will create the MariaDB/MySQL database `addresses`.
-2. The file `info/info.php` contains default database values. It may be necessary to update it with the database configuration in use.
+1. Install Node.js dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Database setup:
+   - The script `db/addresses.sql` must be run. It will create the MariaDB/MySQL database `addresses`.
+   - The file `info/info.js` contains default database values. It may be necessary to update it with your database configuration.
+
+3. Start the server:
+   ```bash
+   npm start
+   ```
+
+   For development with auto-restart:
+   ```bash
+   npm run dev
+   ```
+
+The server will run on port 3000 by default (or the port specified in the PORT environment variable).
 
 ## API Endpoints
 |Method|Endpoint|
