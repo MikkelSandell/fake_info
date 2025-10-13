@@ -1,50 +1,136 @@
-# Fake Data Generator
+# 🇩🇰 Danish Fake Personal Data Generator
 
-## Purpose
-Sample Node.js REST API that generates fake data of nonexistent Danish persons.
+## 📖 Purpose
+A complete Node.js REST API that generates realistic fake data for nonexistent Danish persons. Originally converted from PHP to JavaScript with comprehensive E2E testing using Cypress.
 
-## Dependencies
+## ✨ Features
+- **Complete Person Generation**: CPR numbers, names, addresses, phone numbers
+- **Partial Data Generation**: Generate only specific fields (CPR only, name+gender, etc.)
+- **Danish Localization**: Authentic Danish names, addresses, and phone number formats  
+- **Database Integration**: MySQL/MariaDB with fallback to mock data
+- **Web Interface**: Interactive HTML form for easy data generation
+- **Comprehensive Testing**: Full Cypress E2E test suite with complete functionality coverage
 
-- Node.js 16.0.0 or higher
-- MySQL/MariaDB database
-- The fake persons' first name, last name, and gender are extracted from the file `data/person-names.json`.
-- The fake persons' postal code and town are extracted from the MariaDB/MySQL database `addresses`.
+## 🛠️ Dependencies
 
-## Installation
+### Runtime Dependencies
+- **Node.js** 16.0.0 or higher
+- **Express.js** 4.18.2 - Web framework
+- **MySQL2** 3.6.0 - Database connector
+- **CORS** 2.8.5 - Cross-origin resource sharing
 
-1. Install Node.js dependencies:
-   ```bash
-   npm install
-   ```
+### Development Dependencies  
+- **Cypress** 15.4.0 - E2E testing framework
+- **Nodemon** 3.0.1 - Development auto-restart
 
-2. Database setup:
-   - The script `db/addresses.sql` must be run. It will create the MariaDB/MySQL database `addresses`.
-   - The file `info/info.js` contains default database values. It may be necessary to update it with your database configuration.
+### Data Sources
+- **Names & Gender**: `data/person-names.json` (Danish first/last names)
+- **Addresses**: MySQL/MariaDB database `addresses` (postal codes & towns)
+- **Fallback**: Mock data when database unavailable
 
-3. Start the server:
-   ```bash
-   npm start
-   ```
+## 🚀 Installation
 
-   For development with auto-restart:
-   ```bash
-   npm run dev
-   ```
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-The server will run on port 3000 by default (or the port specified in the PORT environment variable).
+### 2. Database Setup (Optional)
+- **SQL Script**: Run `db/addresses.sql` to create MySQL/MariaDB database `addresses`
+- **Configuration**: Update `info/info.js` with your database credentials
+- **Fallback**: System works with mock data if database unavailable
 
-## API Endpoints
-|Method|Endpoint|
-|------|--------|
-|GET|/cpr|
-|GET|/name-gender|
-|GET|/name-gender-dob|
-|GET|/cpr-name-gender|
-|GET|/cpr-name-gender-dob|
-|GET|/address|
-|GET|/phone|
-|GET|/person|
-|GET|/person&n=<number_of_fake_persons>|
+### 3. Start the Server
+```bash
+# Production mode
+npm start
+
+# Development mode (auto-restart)
+npm run dev
+```
+
+### 4. Access the Application
+- **API Server**: http://localhost:3000
+- **Web Interface**: http://127.0.0.1:5500/index.html (via Live Server)
+
+## 🧪 End-to-End Testing
+
+### Prerequisites
+Before running E2E tests, ensure both services are running:
+
+1. **Start the API Server** (Terminal 1):
+```bash
+npm start
+```
+Server runs on: http://localhost:3000
+
+2. **Start the Web Interface** (Terminal 2):
+- Open `index.html` with Live Server in VS Code
+- Or serve via: http://127.0.0.1:5500/index.html
+
+### Running E2E Tests
+
+#### Option 1: Interactive Test Runner (Recommended)
+```bash
+npm run cypress:open
+```
+- Opens Cypress Test Runner GUI
+- Select and run tests individually
+- Real-time debugging and screenshots
+- Perfect for development and debugging
+
+#### Option 2: Headless Test Execution
+```bash
+# Run all test files
+npm run cypress:run
+
+# Run specific test file
+npx cypress run --spec "00_Cypress/test-test.cy.js"
+```
+
+#### Option 3: Custom Test Scripts
+```bash
+# Run comprehensive test suite (alias)
+npm run test:e2e
+```
+
+### Test Files Overview
+| Test File | Focus Area |
+|-----------|------------|
+| `test-test.cy.js` | Complete E2E test suite with dropdown options, data validation, and performance testing |
+
+### Test Coverage Areas
+- **Basic Functionality**: Page load, form validation, API integration
+- **Dropdown Options**: All 7 partial generation options  
+- **Data Validation**: CPR format, phone numbers, addresses
+- **Performance**: 100-person generation stress test
+- **Error Handling**: API failures, invalid inputs
+- **Accessibility**: ARIA labels, keyboard navigation
+- **UI Responsiveness**: Mobile, tablet, desktop viewports
+
+### Troubleshooting Tests
+If tests fail, check:
+1. **API Server**: Ensure http://localhost:3000 is accessible
+2. **Web Interface**: Ensure http://127.0.0.1:5500/index.html loads
+3. **Port Conflicts**: Check if ports 3000 or 5500 are in use
+4. **Dependencies**: Run `npm install` to ensure all packages installed
+
+## 🌐 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/cpr` | Generate CPR number only |
+| GET | `/name-gender` | Generate name and gender |
+| GET | `/name-gender-dob` | Generate name, gender, and date of birth |
+| GET | `/cpr-name-gender` | Generate CPR, name, and gender |
+| GET | `/cpr-name-gender-dob` | Generate CPR, name, gender, and DOB |
+| GET | `/address` | Generate address only |
+| GET | `/phone` | Generate phone number only |
+| GET | `/person` | Generate complete person data |
+| GET | `/person?n=<number>` | Generate multiple persons (1-100) |
+
+### Query Parameters
+- `n`: Number of persons to generate (1-100, default: 1)
 
 ## API Sample Output
 `GET /cpr`
@@ -128,52 +214,81 @@ The server will run on port 3000 by default (or the port specified in the PORT e
 ]
 ```
 
-## Class `FakeInfo` - Public methods
+## 📁 Project Structure
 
-```php
+```
+fake_info/
+├── 00_Cypress/                    # Cypress E2E tests
+│   ├── basic-test.cy.js           # Basic functionality tests
+│   ├── dropdown-options-test.cy.js # Dropdown option tests  
+│   ├── fake-info-test.cy.js       # Comprehensive test suite
+│   └── robust-test.cy.js          # Robust testing scenarios
+├── data/
+│   └── person-names.json          # Danish names database
+├── db/
+│   └── addresses.sql              # Database setup script
+├── info/
+│   └── info.js                    # Database configuration
+├── src/
+│   ├── DB.js                      # Database connection wrapper
+│   ├── FakeInfo.js                # Main data generation class
+│   └── Town.js                    # Postal code/town generator
+├── cypress.config.js              # Cypress configuration
+├── index.html                     # Web interface
+├── index.js                       # Express server
+└── package.json                   # Dependencies & scripts
+```
+
+## 🔧 Core Classes
+
+### `FakeInfo` Class - Public Methods
+```javascript
 - getCPR(): string
-- getFullNameAndGender(): array
-- getFullNameGenderAndBirthDate(): array
-- getCprFullNameAndGender(): array
-- getCprFullNameGenderAndBirthDate(): array
-- getAddress(): string
+- getFullNameAndGender(): object  
+- getFullNameGenderAndBirthDate(): object
+- getCprFullNameAndGender(): object
+- getCprFullNameGenderAndBirthDate(): object
+- getAddress(): object
 - getPhoneNumber(): string
-- getFakePerson(): array
-- getFakePersons(int $amount): array
+- getFakePerson(): object
+- getFakePersons(amount: number): array
 ```
 
-## Sample Class Output
+### Sample Usage
+```javascript
+const FakeInfo = require('./src/FakeInfo');
+const fakeInfo = new FakeInfo();
 
-```php
-echo '<pre>';
-$fakeInfo = new FakeInfo;
-print_r($fakeInfo->getFakePersons());
+// Generate single person
+const person = await fakeInfo.getFakePerson();
+console.log(person);
+
+// Generate multiple persons
+const persons = await fakeInfo.getFakePersons(5);
+console.log(persons);
 ```
 
-Output
-```php
-Array
-(
-    [CPR] => 1909743965
-    [firstName] => Anton D.
-    [lastName] => Jespersen
-    [gender] => male
-    [birthDate] => 1974-09-19
-    [address] => Array
-        (
-            [street] => WTquWUqMiHLBKXcEÆnMpqhdGæzlrødfAAAJuGGXø
-            [number] => 456
-            [floor] => 61
-            [door] => th
-            [postal_code] => 3650
-            [town_name] => Ølstykke
-        )
-    [phoneNumber] => 55129415
-)
-```
+## 🌟 Features
 
-## Tools
-PHP8 / MariaDB
+### Danish Localization
+- **CPR Numbers**: Valid format with gender logic
+- **Names**: Authentic Danish first/last names
+- **Phone Numbers**: Valid Danish mobile prefixes
+- **Addresses**: Real postal codes and Danish town names
 
-## Author
-Arturo Mora-Rioja
+### Testing Framework
+- **Complete Test Coverage**: All functionality tested
+- **Dropdown Testing**: All 7 partial generation options
+- **Performance Testing**: 100-person generation
+- **Error Handling**: API failure scenarios
+- **Accessibility**: WCAG compliance checks
+
+## 🛠️ Technology Stack
+- **Backend**: Node.js + Express.js
+- **Database**: MySQL/MariaDB (optional)
+- **Testing**: Cypress E2E Framework
+- **Frontend**: Vanilla HTML/CSS/JavaScript
+
+## 👨‍💻 Authors
+- **Original PHP Version**: Arturo Mora-Rioja
+- **Node.js Conversion & Testing**: [Current Developer]

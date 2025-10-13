@@ -6,15 +6,26 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "cypress run --spec \"00_Cypress/**/*.cy.js\""
   },
-  "keywords": ["fake", "data", "generator", "danish", "api", "rest"],
+  "keywords": [
+    "fake",
+    "data",
+    "generator",
+    "danish",
+    "api",
+    "rest"
+  ],
   "author": "Arturo Mora-Rioja",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
+    "cypress": "^15.4.0",
     "express": "^4.18.2",
-    "mysql2": "^3.6.0",
-    "cors": "^2.8.5"
+    "mysql2": "^3.6.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
