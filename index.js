@@ -3,7 +3,6 @@ const cors = require('cors');
 const FakeInfo = require('./src/FakeInfo.js');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -13,6 +12,11 @@ app.use(express.json());
 const ERROR_METHOD = 0;
 const ERROR_ENDPOINT = 1;
 const ERROR_PARAMS = 2;
+
+// Vi beholder én global instans KUN til synkront genererede data (CPR, navn, tlf), 
+// da de ikke kræver den asynkrone initialize() metode og sparer ressourcer.
+const fakeInfoGeneratorSync = new FakeInfo();
+
 
 /**
  * Reports error with appropriate HTTP status code and message
@@ -45,80 +49,78 @@ function reportError(res, error = -1) {
     });
 }
 
-// Routes
-app.get('/cpr', async (req, res) => {
+// ------------------------------------
+// SYNKRONE ROUTES (Bruger global instans)
+// ------------------------------------
+
+app.get('/cpr', (req, res) => {
     try {
-        const fakePerson = new FakeInfo();
-        await fakePerson.initialize();
-        res.json({ CPR: fakePerson.getCpr() });
+        res.json({ CPR: fakeInfoGeneratorSync.getCpr() });
     } catch (error) {
         console.error('Error generating CPR:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-app.get('/name-gender', async (req, res) => {
+app.get('/name-gender', (req, res) => {
     try {
-        const fakePerson = new FakeInfo();
-        await fakePerson.initialize();
-        res.json(fakePerson.getFullNameAndGender());
+        res.json(fakeInfoGeneratorSync.getFullNameAndGender());
     } catch (error) {
         console.error('Error generating name-gender:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-app.get('/name-gender-dob', async (req, res) => {
+app.get('/name-gender-dob', (req, res) => {
     try {
-        const fakePerson = new FakeInfo();
-        await fakePerson.initialize();
-        res.json(fakePerson.getFullNameGenderAndBirthDate());
+        res.json(fakeInfoGeneratorSync.getFullNameGenderAndBirthDate());
     } catch (error) {
         console.error('Error generating name-gender-dob:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-app.get('/cpr-name-gender', async (req, res) => {
+app.get('/cpr-name-gender', (req, res) => {
     try {
-        const fakePerson = new FakeInfo();
-        await fakePerson.initialize();
-        res.json(fakePerson.getCprFullNameAndGender());
+        res.json(fakeInfoGeneratorSync.getCprFullNameAndGender());
     } catch (error) {
         console.error('Error generating cpr-name-gender:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-app.get('/cpr-name-gender-dob', async (req, res) => {
+app.get('/cpr-name-gender-dob', (req, res) => {
     try {
-        const fakePerson = new FakeInfo();
-        await fakePerson.initialize();
-        res.json(fakePerson.getCprFullNameGenderAndBirthDate());
+        res.json(fakeInfoGeneratorSync.getCprFullNameGenderAndBirthDate());
     } catch (error) {
         console.error('Error generating cpr-name-gender-dob:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-app.get('/address', async (req, res) => {
+app.get('/phone', (req, res) => {
     try {
-        const fakePerson = new FakeInfo();
-        await fakePerson.initialize();
-        res.json(fakePerson.getAddress());
+        res.json({ phoneNumber: fakeInfoGeneratorSync.getPhoneNumber() });
     } catch (error) {
-        console.error('Error generating address:', error);
+        console.error('Error generating phone:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-app.get('/phone', async (req, res) => {
+// ------------------------------------
+// ASYNKRONE ROUTES (Skal oprette ny instans og await initialize())
+// ------------------------------------
+
+app.get('/address', async (req, res) => {
     try {
+        // Opretter en NY instans.
         const fakePerson = new FakeInfo();
-        await fakePerson.initialize();
-        res.json({ phoneNumber: fakePerson.getPhoneNumber() });
+        // VIGTIGT: Awaiter initialize() for at sikre address data (DB/fallback) er til stede.
+        await fakePerson.initialize(); 
+
+        res.json(fakePerson.getAddress());
     } catch (error) {
-        console.error('Error generating phone:', error);
+        console.error('Error generating address:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -130,15 +132,21 @@ app.get('/person', async (req, res) => {
         switch (true) {
             case numPersons === 0:
                 return reportError(res, ERROR_PARAMS);
+                
             case numPersons === 1:
+                // Opretter en NY instans for enkeltperson.
                 const fakePerson = new FakeInfo();
-                await fakePerson.initialize();
+                // VIGTIGT: Awaiter initialize() for at få adresse-data.
+                await fakePerson.initialize(); 
                 res.json(fakePerson.getFakePerson());
                 break;
+                
             case numPersons > 1 && numPersons <= 100:
+                // Static metoden FakeInfo.getFakePersons håndterer initialize() internt.
                 const persons = await FakeInfo.getFakePersons(numPersons);
                 res.json(persons);
                 break;
+                
             default:
                 return reportError(res, ERROR_PARAMS);
         }
@@ -156,19 +164,40 @@ app.all('*', (req, res) => {
     return reportError(res, ERROR_ENDPOINT);
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Fake Info API server running on port ${PORT}`);
-    console.log(`Available endpoints:`);
-    console.log(`  GET /cpr`);
-    console.log(`  GET /name-gender`);
-    console.log(`  GET /name-gender-dob`);
-    console.log(`  GET /cpr-name-gender`);
-    console.log(`  GET /cpr-name-gender-dob`);
-    console.log(`  GET /address`);
-    console.log(`  GET /phone`);
-    console.log(`  GET /person`);
-    console.log(`  GET /person?n=<number_of_fake_persons>`);
-});
-
+// VIGTIGT: Eksporter Express app'en, så tests kan importere den
 module.exports = app;
+
+/**
+ * Starter applikationsserveren KUN, hvis filen køres direkte 
+ * (dvs. 'node index.js' eller 'npm start'). 
+ * Initialiseringen af den globale synkrone instans sker her.
+ */
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
+
+    // Før serverstart: Vi initialiserer den synkrone instans (selvom den reelt kun opretter adresse-data).
+    // Dette er kun nødvendigt, hvis du vil se DB/fallback loggen ved opstart.
+    // Bemærk: Denne initialisering er IKKE den, der bruges af integrationstests.
+    fakeInfoGeneratorSync.initialize()
+        .then(() => {
+            // Start server
+            app.listen(PORT, () => {
+                console.log(`Fake Info API server running on port ${PORT}`);
+                console.log(`Available endpoints:`);
+                console.log(`   GET /cpr`);
+                console.log(`   GET /name-gender`);
+                console.log(`   GET /name-gender-dob`);
+                console.log(`   GET /cpr-name-gender`);
+                console.log(`   GET /cpr-name-gender-dob`);
+                console.log(`   GET /address`);
+                console.log(`   GET /phone`);
+                console.log(`   GET /person`);
+                console.log(`   GET /person?n=<number_of_fake_persons>`);
+            });
+        })
+        .catch(err => {
+            console.error('FATAL ERROR: Could not initialize FakeInfo generator (DB issue). Exiting.', err);
+            // Hvis initialiseringen fejler, stopper vi applikationen.
+            process.exit(1);
+        });
+}

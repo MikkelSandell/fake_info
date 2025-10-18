@@ -3,8 +3,7 @@ const info = require('../info/info.js');
 
 /**
  * Encapsulates a connection to the database 
- * 
- * @author  Arturo Mora-Rioja
+ * * @author 	Arturo Mora-Rioja
  * @version 1.0 October 2025
  */
 class DB {
@@ -22,6 +21,7 @@ class DB {
                 database: info.DB_NAME,
                 user: info.USER,
                 password: info.PASSWORD,
+                port: info.PORT, // RETTET: Skal være info.PORT for at matche konfigurationen
                 charset: 'utf8mb4'
             });
             console.log('Database connection successful');

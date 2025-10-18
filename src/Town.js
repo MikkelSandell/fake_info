@@ -38,19 +38,22 @@ class Town extends DB {
      * 
      * @return object {postal_code: value, town_name: value}
      */
-    async getRandomTown() {
-        await this.initializeTownCount();
-        
-        const randomTown = Math.floor(Math.random() * Town.townCount);
-        const sql = `
-            SELECT cPostalCode AS postal_code, cTownName AS town_name
-            FROM postal_code
-            LIMIT ?, 1;
-        `;
-        
-        const rows = await this.query(sql, [randomTown]);
-        return rows[0];
-    }
+async getRandomTown() {
+    await this.initializeTownCount();
+    
+    // Sikrer at det er en INTEGER, for at undgå at sende en ugyldig type til MySQL-driveren
+    const randomTown = parseInt(Math.floor(Math.random() * Town.townCount));
+    
+    const sql = `
+        SELECT cPostalCode AS postal_code, cTownName AS town_name
+        FROM postal_code
+        LIMIT ?, 1; 
+    `;
+    
+    // Linje 51: SIKRER at randomTown er i et array, som parameter til query-metoden
+    const rows = await this.query(sql, [randomTown]); 
+    return rows[0];
+}
 }
 
 module.exports = Town;
