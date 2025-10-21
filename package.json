@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:cov": "jest --coverage",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "test:e2e": "cypress run --spec \"00_Cypress/**/*.cy.js\""
@@ -28,6 +29,7 @@
     "mysql2": "^3.6.0"
   },
   "devDependencies": {
+    "jest": "^30.2.0",
     "nodemon": "^3.0.1"
   },
   "engines": {
