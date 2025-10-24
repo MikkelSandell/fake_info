@@ -1,5 +1,5 @@
 Setup i postman:
-Copy paste collection filen ind:
+Import json filen i collections.
 Bum det virker!
 
 Hvis man gerne vil sætte et enviorment op:
