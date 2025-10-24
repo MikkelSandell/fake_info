@@ -1,0 +1,479 @@
+{
+	"info": {
+		"_postman_id": "696e8ca1-829c-45ad-aea6-da14971924e4",
+		"name": "Mandatory 1 API Tests",
+		"description": "Postman collection for testing fake data API endpoints on localhost:3000",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32987175"
+	},
+	"item": [
+		{
+			"name": "GET /cpr",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Has property CPR and valid format\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(data).to.have.property(\"CPR\");",
+							"    pm.expect(data.CPR).to.match(/^\\d{6}-?\\d{4}$/);",
+							"});",
+							"",
+							"",
+							"pm.test(\"CPR field is not empty\", function () {",
+							"    const data = pm.response.json();",
+							"    const cpr = data.CPR || data.cpr;",
+							"    pm.expect(cpr).to.not.be.empty;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/cpr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cpr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /name-gender",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Has firstName, lastName and gender\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(data).to.have.property(\"firstName\");",
+							"    pm.expect(data).to.have.property(\"lastName\");",
+							"    pm.expect(data).to.have.property(\"gender\");",
+							"    pm.expect(data.gender).to.match(/^(male|female)$/i);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/name-gender",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"name-gender"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /name-gender-dob",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Has firstName, lastName, gender and birthDate\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(data).to.have.property(\"firstName\");",
+							"    pm.expect(data).to.have.property(\"lastName\");",
+							"    pm.expect(data).to.have.property(\"gender\");",
+							"    pm.expect(data).to.have.property(\"birthDate\");",
+							"    pm.expect(data.birthDate).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/name-gender-dob",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"name-gender-dob"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /cpr-name-gender",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Has CPR, firstName, lastName and gender\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(data).to.have.property(\"cpr\");",
+							"    pm.expect(data).to.have.property(\"firstName\");",
+							"    pm.expect(data).to.have.property(\"lastName\");",
+							"    pm.expect(data).to.have.property(\"gender\");",
+							"    pm.expect(data.cpr).to.match(/^\\d{6}-\\d{4}$/);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/cpr-name-gender",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cpr-name-gender"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /cpr-name-gender-dob",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Has CPR, firstName, lastName, gender and birthDate\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(data).to.have.property(\"CPR\");",
+							"    pm.expect(data).to.have.property(\"firstName\");",
+							"    pm.expect(data).to.have.property(\"lastName\");",
+							"    pm.expect(data).to.have.property(\"gender\");",
+							"    pm.expect(data).to.have.property(\"birthDate\");",
+							"    pm.expect(data.birthDate).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/cpr-name-gender-dob",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cpr-name-gender-dob"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Has address\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(data).to.have.property(\"address\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/address",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /phone",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Has phone number and valid format\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(data).to.have.property(\"phone\");",
+							"    pm.expect(data.phone).to.match(/^\\+?\\d{8,15}$/);",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/phone",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"phone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /person",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Has all person fields with valid structure\", function () {",
+							"    const data = pm.response.json();",
+							"",
+							"    // Top-level properties",
+							"    pm.expect(data).to.have.property(\"CPR\");",
+							"    pm.expect(data).to.have.property(\"firstName\");",
+							"    pm.expect(data).to.have.property(\"lastName\");",
+							"    pm.expect(data).to.have.property(\"gender\");",
+							"    pm.expect(data).to.have.property(\"birthDate\");",
+							"    pm.expect(data).to.have.property(\"address\");",
+							"    pm.expect(data).to.have.property(\"phoneNumber\");",
+							"",
+							"    // CPR format (with or without dash)",
+							"    pm.expect(data.CPR).to.match(/^\\d{6}-?\\d{4}$/);",
+							"",
+							"    // Gender format",
+							"    pm.expect(data.gender).to.match(/^(male|female)$/i);",
+							"",
+							"    // Birthdate format (YYYY-MM-DD)",
+							"    pm.expect(data.birthDate).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+							"",
+							"    // Address object structure",
+							"    pm.expect(data.address).to.be.an(\"object\");",
+							"    pm.expect(data.address).to.have.property(\"street\");",
+							"    pm.expect(data.address).to.have.property(\"number\");",
+							"    pm.expect(data.address).to.have.property(\"floor\");",
+							"    pm.expect(data.address).to.have.property(\"door\");",
+							"    pm.expect(data.address).to.have.property(\"postal_code\");",
+							"    pm.expect(data.address).to.have.property(\"town_name\");",
+							"",
+							"    // Phone number format (8 digits minimum)",
+							"    pm.expect(data.phoneNumber).to.match(/^\\d{8,}$/);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"person"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /person?n=10",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an array\", function () {",
+							"    const data = pm.response.json();",
+							"    pm.expect(data).to.be.an(\"array\");",
+							"});",
+							"",
+							"pm.test(\"Each person has at least firstName and lastName\", function () {",
+							"    const data = pm.response.json();",
+							"    data.forEach(person => {",
+							"        pm.expect(person).to.have.property(\"firstName\");",
+							"        pm.expect(person).to.have.property(\"lastName\");",
+							"    });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/person?n=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "n",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
