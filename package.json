@@ -12,7 +12,7 @@
     "cypress:run": "cypress run",
     "test:e2e": "cypress run --spec \"00_Cypress/**/*.cy.js\"",
     "test:unit": "jest --testPathIgnorePatterns=cypress",
-    "test:integration": "jest --testMatch=\"<rootDir>/test/integration/**/*.test.js\"",
+    "test:integration": "jest --testMatch=\"<rootDir>/test/integration.test.js\"",
     "testintegration": "npm run test:unit && npm run test:integration" 
   },
   "keywords": [
