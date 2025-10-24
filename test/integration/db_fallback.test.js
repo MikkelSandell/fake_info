@@ -42,7 +42,7 @@ describe('Database Fallback Integration', () => {
         // 4. Tjekker, at bynavnet er et af de gyldige mock-bynavne
         expect(validTownNames).toContain(address.town_name);
         
-        // Valgfri: Tjek at gadenavnet er en string (street har ikke et fast mock-array)
+        // Tjek at gadenavnet er en string (street har ikke et fast mock-array)
         expect(typeof address.street).toBe('string');
         expect(address.street.length).toBeGreaterThan(0);
     });

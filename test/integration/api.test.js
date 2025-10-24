@@ -11,7 +11,7 @@ describe('API Endpoint Integration Tests', () => {
         expect(response.body.CPR).toHaveLength(10);
     });
 
-    // Test 2: Validering af CPR/Køn-sammenhæng (Kritisk for opgaven)
+    // Test 2: Validering af CPR/Køn-sammenhæng 
     test('GET /cpr-name-gender should return valid CPR for gender constraint', async () => {
         const response = await request(app).get('/cpr-name-gender');
         expect(response.statusCode).toBe(200);
