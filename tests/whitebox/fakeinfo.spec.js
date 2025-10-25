@@ -16,7 +16,7 @@ jest.mock('../../src/Town.js', () => {
   };
 });
 
-const FakeInfo = require('../../src/fakeinfo.js');
+const FakeInfo = require('../../src/FakeInfo.js');
 
 function withMockRandom(sequence, fn) {
   const spy = jest.spyOn(Math, 'random').mockImplementation(() => {
