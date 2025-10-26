@@ -1,3 +1,5 @@
+// @flow
+
 const FakeInfo = require("../../src/FakeInfo");
 
 
