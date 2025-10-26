@@ -1,9 +1,10 @@
-name: CI
+name: Frontend CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -25,6 +26,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests
+      - name: Run Jest tests
         run: |
-          npx --yes mocha "tests/**/*.{test,spec}.js" --reporter spec
+          npx jest --ci --coverage --reporters=default
