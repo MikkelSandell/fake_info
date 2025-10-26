@@ -1,3 +1,5 @@
+// @flow
+
 const  FakeInfo= require('../../src/FakeInfo');
 
 test("the different attributes of an address",async ()=>{

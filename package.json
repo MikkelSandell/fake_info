@@ -29,6 +29,7 @@
     "cors": "^2.8.5",
     "cypress": "^15.4.0",
     "express": "^4.18.2",
+    "flow": "^0.2.3",
     "mysql2": "^3.6.0"
   },
   "devDependencies": {
