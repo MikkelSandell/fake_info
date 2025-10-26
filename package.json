@@ -32,6 +32,7 @@
     "mysql2": "^3.6.0"
   },
   "devDependencies": {
+    "flow-bin": "^0.289.0",
     "jest": "^30.2.0",
     "nodemon": "^3.0.1",
     "supertest": "^7.1.4"
