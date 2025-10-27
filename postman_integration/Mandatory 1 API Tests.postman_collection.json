@@ -168,11 +168,11 @@
 							"",
 							"pm.test(\"Has CPR, firstName, lastName and gender\", function () {",
 							"    const data = pm.response.json();",
-							"    pm.expect(data).to.have.property(\"cpr\");",
+							"    pm.expect(data).to.have.property(\"CPR\");",
 							"    pm.expect(data).to.have.property(\"firstName\");",
 							"    pm.expect(data).to.have.property(\"lastName\");",
 							"    pm.expect(data).to.have.property(\"gender\");",
-							"    pm.expect(data.cpr).to.match(/^\\d{6}-\\d{4}$/);",
+							"    pm.expect(data.CPR).to.match(/^\\d{6}-?\\d{4}$/);",
 							"});"
 						],
 						"type": "text/javascript",
@@ -304,18 +304,22 @@
 				{
 					"listen": "test",
 					"script": {
-						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"Has phone number and valid format\", function () {",
+							"pm.test(\"Has phoneNumber and valid format\", function () {",
 							"    const data = pm.response.json();",
-							"    pm.expect(data).to.have.property(\"phone\");",
-							"    pm.expect(data.phone).to.match(/^\\+?\\d{8,15}$/);",
-							"});"
-						]
+							"",
+							"    pm.expect(data).to.have.property(\"phoneNumber\");",
+							"    pm.expect(data.phoneNumber).to.match(/^\\d{8}$/); ",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
 					}
 				}
 			],
