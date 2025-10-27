@@ -1,4 +1,4 @@
-// @flow
+
 
 const  FakeInfo= require('../../src/FakeInfo');
 
@@ -42,7 +42,7 @@ test("the different attributes of a number",async ()=>{
     expect(street).toBeDefined(); 
     expect(typeof street).toBe('string');
 
-    const hasLetter =/(\d{1,3}(?:\p{L})?)/u.test(street);
+    const hasLetter =/(\d{1,3}(?:\p{Lu})?)/u.test(street);
     expect(hasLetter).toBe(true);
 
 });

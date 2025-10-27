@@ -9,6 +9,8 @@ const Town = require('./Town.js');
  * @author  Arturo Mora-Rioja
  * @version 1.0.0 October 2025
  */
+
+// @flow
 class FakeInfo {
     static GENDER_FEMININE = 'female';
     static GENDER_MASCULINE = 'male';
